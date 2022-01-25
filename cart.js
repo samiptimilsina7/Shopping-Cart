@@ -50,6 +50,8 @@ let products=[
 }]; //products is what is seen in home page
 let sum=0;
 let inCartItems=[]; //after adding to cart, the cart items is seen on the cart billing area
+// let count=0; //counts the increment and decrement and passes it to the count value
+
 
 function displayProducts(){
     products.forEach((product,index)=>{
@@ -88,10 +90,11 @@ displayProducts();
 const addCart=(id)=>{
     // console.log(index)
 
+
     products.forEach((product)=>{
         if (product.id==id){
-            inCartItems.push({id:product.id,image:product.image,name:product.name,price:product.price})
-        }
+            inCartItems.push({id:product.id,image:product.image,name:product.name,price:product.price, count:1})
+        } //made count 1 as cart items added should be 1 not 0 cause it is added, imo
     }) //pushing products selected to cart items
 
     sumProducts();
@@ -115,7 +118,7 @@ const addCart=(id)=>{
 function sumProducts(){
     sum=0
     inCartItems.forEach((product)=>{
-        sum+= product.price
+        sum+= product.price*product.count
     })
     document.querySelector(".sliding-form h3").innerHTML="Your total: "+sum //add sum
 }
@@ -133,13 +136,13 @@ function displayCartSelection(){
                 <span onclick="removeCartProduct(${product.id})">remove</span>
             </div>
             <div class="increment-decrement">
-                <i class="fas fa-chevron-up"></i>
-                <p>Count</p>
-                <i class="fas fa-chevron-down"></i>
+                <i class="fas fa-chevron-up" onclick="increaseQuantity(${product.id})"></i>
+                <p>${product.count}</p>
+                <i class="fas fa-chevron-down" onclick="decreaseQuantity(${product.id})"></i>
             </div>
         </div>
         ` //displays only the cart items in the cart billing area
-    })
+    }) 
 }
 
 const removeCartProduct=(id)=>{
@@ -151,4 +154,40 @@ const removeCartProduct=(id)=>{
     sumProducts();
 }
 
+const increaseQuantity=(id)=>{
+    // inCartItems.forEach((product)=>{
+    //     count=0
+    // })
+    inCartItems.forEach((product)=>{
+        if (product.id==id){
+            product.count+=1
+            // let arrayIndex=product.id-1
+            // document.querySelectorAll(".increment-decrement p")[arrayIndex].innerHTML=product.count
+            // // document.querySelector(".increment-decrement p").innerHTML=product.count  
+        }
+    })
+    displayCartSelection(); //changed the ".increment-decrement p" to product.count so every +1 is displayed again
+    sumProducts()
+    // count+=1
+} //increase the quantitiy amount on clicking the ^ option
+
+// const decreaseQuantity=(id)=>{
+//     // count=document.querySelector(".increment-decrement p").innerHTML
+//     count-=1
+//     document.querySelector(".increment-decrement p").innerHTML=count
+// } //decrease the quantity amount on clicking the V option
+
+const decreaseQuantity=(id)=>{
+    inCartItems.forEach((product)=>{
+        if (product.id==id) {
+            product.count-=1
+            if (product.count<1) {
+                removeCartProduct(id)
+            }
+        }
+    })
+
+    displayCartSelection();
+    sumProducts();
+}
 
