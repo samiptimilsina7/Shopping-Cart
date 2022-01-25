@@ -87,10 +87,17 @@ displayProducts();
 
 const addCart=(id)=>{
     // console.log(index)
-    sumProducts(id);
-    displayCartSelection(id); 
-    // inCartItems.push({image:products[index].image,name:products[index].name,price:products[index].price,index:index})
-    // console.log(inCartItems) //want to alter inCartItems in remove section
+
+    products.forEach((product)=>{
+        if (product.id==id){
+            inCartItems.push({id:product.id,image:product.image,name:product.name,price:product.price})
+        }
+    }) //pushing products selected to cart items
+
+    sumProducts();
+
+    displayCartSelection(); //next step to pass in cart items and loop it so no need to pass id value
+
 }
 
 // function sumProducts(id){
@@ -105,41 +112,43 @@ const addCart=(id)=>{
 //     // console.log('hey'+index)
 // }
 
-function sumProducts(id){
-    products.forEach((product)=>{
-        if (product.id==id){
-            sum+= product.price
-        }
+function sumProducts(){
+    sum=0
+    inCartItems.forEach((product)=>{
+        sum+= product.price
     })
     document.querySelector(".sliding-form h3").innerHTML="Your total: "+sum //add sum
 }
 
-// function displayCartSelection(index){
-//     document.querySelector(".brought-items").innerHTML+=`  
-//     <div class=".brought-items-content">
-//         <img src=${products[index].image} alt="product photo">
-//         <div class="brought-items-details">
-//             <h4>${products[index].name}</h4>
-//             <h5>${products[index].price}</h5>
-//             <span onclick="removeCartProduct(${index})">remove</span>
-//         </div>
-//         <div class="increment-decrement">
-//             <i class="fas fa-chevron-up"></i>
-//             <p>Count</p>
-//             <i class="fas fa-chevron-down"></i>
-//         </div>
-//     </div>
-//     ` //displays the items in the cart billing area
-// }
+function displayCartSelection(){
+    document.querySelector(".brought-items").innerHTML='' //clears the cart billing area so that the product cant be seen twice when adding next product
 
-// const removeCartProduct=(_index)=>{
-//     inCartItems=inCartItems.filter(product=>product.index!==_index)
-//     // console.log(inCartItems)
-//     document.querySelector(".brought-items").innerHTML='' //clears the cart billing area
-//     // sum=0;
-//     sum-=products[_index].price //decreases the sum by using the products array
-//     inCartItems.forEach(product=>displayCartSelection(product.index))
-//     document.querySelector(".sliding-form h3").innerHTML="Your total: "+sum //add sum
-// }
+    inCartItems.map(product=>{
+        document.querySelector(".brought-items").innerHTML+=`  
+        <div class=".brought-items-content">
+            <img src=${product.image} alt="product photo">
+            <div class="brought-items-details">
+                <h4>${product.name}</h4>
+                <h5>${product.price}</h5>
+                <span onclick="removeCartProduct(${product.id})">remove</span>
+            </div>
+            <div class="increment-decrement">
+                <i class="fas fa-chevron-up"></i>
+                <p>Count</p>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+        </div>
+        ` //displays only the cart items in the cart billing area
+    })
+}
+
+const removeCartProduct=(id)=>{
+    inCartItems=inCartItems.filter(product=>product.id!==id)
+    console.log(inCartItems)
+
+    displayCartSelection();
+
+    sumProducts();
+}
 
 
