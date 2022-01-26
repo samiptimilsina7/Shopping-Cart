@@ -88,31 +88,49 @@ displayProducts();
 // products={...productNames, ...productPrices};
 
 const addCart=(id)=>{
-    // console.log(index)
 
+    inCartItems.map((product)=>{
+        if (product.id==id){
+            product.count+=1
+            sumProducts();
+            displayCartSelection();
+            return
+        }
+    })
 
     products.forEach((product)=>{
         if (product.id==id){
             inCartItems.push({id:product.id,image:product.image,name:product.name,price:product.price, count:1})
-        } //made count 1 as cart items added should be 1 not 0 cause it is added, imo
+        }   
+        //made count 1 as cart items added should be 1 not 0 cause it is added, imo
     }) //pushing products selected to cart items
 
     sumProducts();
 
     displayCartSelection(); //next step to pass in cart items and loop it so no need to pass id value
-
 }
 
-// function sumProducts(id){
-//     sum+=products.map((product)=>{
-//         if (product.id==id){
-//             return product.price
-//         }
-//     })
-//     console.log(sum)
-//     // sum+=products[index].price
-//     // document.querySelector(".sliding-form h3").innerHTML="Your total: "+sum //add sum
-//     // console.log('hey'+index)
+// const addCart=(id)=>{
+//     for (let i = 0; i < products.length; i++) {
+//         const pageProductsID = products[i].id;
+//         if (pageProductsID==id) {
+//             if (inCartItems==[]) {
+//                 inCartItems.push({id:pageProductsID,image:products[i].image,name:products[i].name,price:products[i].price, count:1})
+//             }
+//             else {
+//                 inCartItems.forEach((product)=>{
+//                     if (product.id==pageProductsID) {
+//                         product.count+=1
+//                     } else{
+                    
+//                     }
+//                 })
+//             }
+//         }   
+//     }
+//     sumProducts();
+
+//     displayCartSelection();
 // }
 
 function sumProducts(){
