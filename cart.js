@@ -1,8 +1,8 @@
 const totalPage=()=>{
     // console.log('button was clicked')
     document.querySelector(".sliding-form").classList.add('transition')
+    // document.querySelector("body").classList.add('color-change')
     // document.querySelector(".header").classList.add('color-change')
-    // document.querySelector(".product-section").classList.add('color-change')
 }
 
 const closePage=()=>{
@@ -15,7 +15,7 @@ let products=[
 {
     id:1,
     image: "./images/pen.png",
-    name:"Aurora Diamante Fountain Pen",
+    name:"Aurora Diamante Pen",
     price:2299
 },
 {
@@ -74,64 +74,69 @@ function displayProducts(){
 displayProducts();
 
 
+// const addCart=(id)=>{
 
+//     inCartItems.map((product)=>{
+//         if (product.id==id){
+//             product.count+=1
+//             sumProducts();
+//             displayCartSelection();
+//             return
+//             inCartItems.push
+//         }
+//     })
 
+//     products.forEach((product)=>{
+//         if (product.id==id){
+//             inCartItems.push({id:product.id,image:product.image,name:product.name,price:product.price, count:1})
+//         }   
+//         //made count 1 as cart items added should be 1 not 0 cause it is added, imo
+//     }) //pushing products selected to cart items
 
-// productNames.forEach((product,index)=>{
-//     object1+={product:product.innerHTML}
-// })
+//     sumProducts();
 
-// productPrices.forEach((product)=>{
-//     object2={price:product.innerHTML}
-// })
-
-// products={...productNames, ...productPrices};
+//     displayCartSelection(); //next step to pass in cart items and loop it so no need to pass id value
+// }
 
 const addCart=(id)=>{
 
-    inCartItems.map((product)=>{
-        if (product.id==id){
-            product.count+=1
-            sumProducts();
-            displayCartSelection();
-            return
+    let checkProductInCart = inCartItems.filter(item => item.id == id);
+    
+    let itemToBeAdded = products.filter((item) => item.id == id);
+    console.log(itemToBeAdded)
+    
+    if (checkProductInCart.length > 0) {
+    
+        inCartItems.map((product) => {
+    
+            if (product.id == id) {
+    
+                product.count += 1
+    
+                sumProducts();
+    
+                displayCartSelection();
+    
+            }
+        })
+    }
+    
+    else {
+    
+            inCartItems.push({
+        
+            ...itemToBeAdded[0],
+        
+            count: 1,
+    
+            });
+    
+        sumProducts();
+        
+        displayCartSelection(); //next step to pass in cart items and loop it so no need to pass id value
         }
-    })
-
-    products.forEach((product)=>{
-        if (product.id==id){
-            inCartItems.push({id:product.id,image:product.image,name:product.name,price:product.price, count:1})
-        }   
-        //made count 1 as cart items added should be 1 not 0 cause it is added, imo
-    }) //pushing products selected to cart items
-
-    sumProducts();
-
-    displayCartSelection(); //next step to pass in cart items and loop it so no need to pass id value
+    
 }
-
-// const addCart=(id)=>{
-//     for (let i = 0; i < products.length; i++) {
-//         const pageProductsID = products[i].id;
-//         if (pageProductsID==id) {
-//             if (inCartItems==[]) {
-//                 inCartItems.push({id:pageProductsID,image:products[i].image,name:products[i].name,price:products[i].price, count:1})
-//             }
-//             else {
-//                 inCartItems.forEach((product)=>{
-//                     if (product.id==pageProductsID) {
-//                         product.count+=1
-//                     } else{
-                    
-//                     }
-//                 })
-//             }
-//         }   
-//     }
-//     sumProducts();
-
-//     displayCartSelection();
-// }
 
 function sumProducts(){
     sum=0
@@ -146,11 +151,11 @@ function displayCartSelection(){
 
     inCartItems.map(product=>{
         document.querySelector(".brought-items").innerHTML+=`  
-        <div class=".brought-items-content">
+        <div class="brought-items-content">
             <img src=${product.image} alt="product photo">
             <div class="brought-items-details">
                 <h4>${product.name}</h4>
-                <h5>${product.price}</h5>
+                <h5>Rs ${product.price}</h5>
                 <span onclick="removeCartProduct(${product.id})">remove</span>
             </div>
             <div class="increment-decrement">
