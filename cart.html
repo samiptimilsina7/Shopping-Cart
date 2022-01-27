@@ -17,6 +17,7 @@
             <button onclick="totalPage()">
                 <i class="fas fa-cart-plus"></i>
             </button>
+            <i class="fas fa-plus" onclick="showAddYourProductForm()"></i>
         </div>
         <div class="product-section">
             <div class="product-text">
@@ -112,8 +113,24 @@
             <h3>Your total: 0</h3>
             <div class="button">
                 <button>PROCEED TO CHECKOUT</button>
-                <button>CLEAR CART</button>
+                <button onclick="clearCart()">CLEAR CART</button>
             </div>
+        </div>
+        <div class="add-product-form d-none">
+            <i class="far fa-window-close" onclick="hideAddYourProductForm()"></i>
+            <h2>Add Your Product</h2>
+            <form action="#">
+                <input type="text" id="product-name" placeholder="Product name">
+                <label for="product-name"></label>
+                <input type="text" id="product-price" placeholder="Product price">
+                <label for="product-price"></label>
+                <input type="file" id="product-image" placeholder="Product image">
+                <label for="product-image"></label>                
+            </form>
+            <div class="image">
+                <img src="" alt="">
+            </div>
+            <button onclick="addYourProduct()">SUBMIT</button>
         </div>
     </section>
     <script src="cart.js"></script>
