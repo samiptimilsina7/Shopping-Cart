@@ -158,6 +158,7 @@ function displayCartSelection(){
 }
 
 const removeCartProduct=(id)=>{
+    console.log(inCartItems)
     inCartItems=inCartItems.filter(product=>product.id!==id)
     console.log(inCartItems)
 
@@ -218,36 +219,48 @@ const addYourProduct=()=>{
     displayProducts();
 }
 
-    let productImg=document.querySelector(".add-product-form #product-image");
-    let img=document.querySelector(".add-product-form .image img");
+let productImg=document.querySelector(".add-product-form #product-image"); //brings image input element
+let img=document.querySelector(".add-product-form .image img"); //to get the image display element and use it for source
     
-    productImg.addEventListener("change",function(){
-        // const reader=new FileReader();
-        // reader.addEventListener("load",()=>{
-        //     uploadedImage=reader.result
-        //     console.log(uploadedImage)
-        //     document.querySelector(".add-product-form .image").style.backgroundImage=`url(${uploadedImage})`
-        // })
-        // reader.readAsDataURL(this.files[0])
-        const file= this.files[0]
+productImg.addEventListener("change",function(){ //when element is changed, the function occurs, when the input changes, we can get the file user has changed
+        console.log(this) //here in an event, this refers to the element where event occurs
+        const file= this.files[0] //getting first file information 
+        console.log(this.files) //here we get all the file user choses and their information like name, but no path information
         console.log(file)
         if(file){
-            const reader=new FileReader();
+            const reader=new FileReader(); //to read the files in this case
             console.log(reader)
-            reader.onload=function(){
-                const result=reader.result;
+            reader.onload=function(){ // when reader has finished loading the code or reading that file, it will load the onload callback
+                const result=reader.result; 
                 console.log(result)
-                img.src=result;
+                img.src=result; //pass the read URL after reading the file to the image source
             }
-            reader.readAsDataURL(file);
+            reader.readAsDataURL(file); ////to read the files in a specific way, read the binary data and convert it as base64 data url
         }
-    })
+}) //to load the image on uploading and pass the source of the image
+
+let checkingName=''
 
 const removeShownProduct=(id)=>{
+
+    products.forEach((product)=>{
+        if (product.id==id) {
+            checkingName=product.name
+        }
+    })  
+
+    console.log(checkingName)
+
     products=products.filter(product=>product.id!==id)
     console.log(products)
+    console.log(id)
     displayProducts(); //updates on the home page products
     // displayCartSelection(); //when cart item is already added but the item is deleted from home page, updates on cart items too
     // sumProducts(); //...so now sum needs to be updated after item is removed.
-    removeCartProduct(id);
+    console.log(id)
+    // removeCartProduct(id);
+
+    inCartItems=inCartItems.filter(product=>product.name!==checkingName);
+    displayCartSelection();
+    sumProducts(); //remove Cart Items as deleting home page products will affect id so the checkingName is used to remove of that name
 }
