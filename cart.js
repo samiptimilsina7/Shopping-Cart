@@ -11,6 +11,14 @@ const closePage=()=>{
     // document.querySelector(".product-section").classList.remove('color-change')
 }
 
+const showAddYourProductForm=()=>{
+    document.querySelector(".add-product-form").classList.remove('d-none');
+}
+
+const hideAddYourProductForm=()=>{
+    document.querySelector(".add-product-form").classList.add('d-none');
+}
+
 let products=[
 {
     id:1,
@@ -54,7 +62,11 @@ let inCartItems=[]; //after adding to cart, the cart items is seen on the cart b
 
 
 function displayProducts(){
+    let productCount=0 //counts from 0 to last product, helpful to pass to the new id after deletetion of product
+    document.querySelector(".products-boxes").innerHTML=''
     products.forEach((product,index)=>{
+        productCount+=1
+        product.id=productCount
         document.querySelector(".products-boxes").innerHTML+=`
         <div class="product-box">
             <div class="image-button">
@@ -63,6 +75,7 @@ function displayProducts(){
                     <i class="fas fa-cart-plus"></i>
                     <p>ADD TO CART</p>
                 </button>
+                <i class="far fa-window-close" onclick="removeShownProduct(${product.id})"></i>
             </div>
         <p class="product-name">${product.name}</p>
         <p class="product-price">Rs ${product.price}</span></p>
@@ -73,30 +86,6 @@ function displayProducts(){
 
 displayProducts();
 
-
-// const addCart=(id)=>{
-
-//     inCartItems.map((product)=>{
-//         if (product.id==id){
-//             product.count+=1
-//             sumProducts();
-//             displayCartSelection();
-//             return
-//             inCartItems.push
-//         }
-//     })
-
-//     products.forEach((product)=>{
-//         if (product.id==id){
-//             inCartItems.push({id:product.id,image:product.image,name:product.name,price:product.price, count:1})
-//         }   
-//         //made count 1 as cart items added should be 1 not 0 cause it is added, imo
-//     }) //pushing products selected to cart items
-
-//     sumProducts();
-
-//     displayCartSelection(); //next step to pass in cart items and loop it so no need to pass id value
-// }
 
 const addCart=(id)=>{
 
@@ -214,3 +203,51 @@ const decreaseQuantity=(id)=>{
     sumProducts();
 }
 
+const clearCart=()=>{
+    inCartItems=[];
+
+    displayCartSelection();
+    sumProducts();
+}
+
+
+const addYourProduct=()=>{
+    let productName=document.querySelector(".add-product-form #product-name").value;
+    let productPrice=document.querySelector(".add-product-form #product-price").value;
+    products.push({id:products.length+1,image:img.src,name:productName,price:parseInt(productPrice)})
+    displayProducts();
+}
+
+    let productImg=document.querySelector(".add-product-form #product-image");
+    let img=document.querySelector(".add-product-form .image img");
+    
+    productImg.addEventListener("change",function(){
+        // const reader=new FileReader();
+        // reader.addEventListener("load",()=>{
+        //     uploadedImage=reader.result
+        //     console.log(uploadedImage)
+        //     document.querySelector(".add-product-form .image").style.backgroundImage=`url(${uploadedImage})`
+        // })
+        // reader.readAsDataURL(this.files[0])
+        const file= this.files[0]
+        console.log(file)
+        if(file){
+            const reader=new FileReader();
+            console.log(reader)
+            reader.onload=function(){
+                const result=reader.result;
+                console.log(result)
+                img.src=result;
+            }
+            reader.readAsDataURL(file);
+        }
+    })
+
+const removeShownProduct=(id)=>{
+    products=products.filter(product=>product.id!==id)
+    console.log(products)
+    displayProducts(); //updates on the home page products
+    // displayCartSelection(); //when cart item is already added but the item is deleted from home page, updates on cart items too
+    // sumProducts(); //...so now sum needs to be updated after item is removed.
+    removeCartProduct(id);
+}
